@@ -28,8 +28,9 @@ public class Parser implements ReadPrecedenceFiles {
                 processName = p_precedence.next();
                 System.out.print("I am " +processName);
                 if(p_precedence.hasNext("(?i)\\s*waitfor\\s*")){
+
                     //add secondary processName to secondaryProcesses list
-                    processes.add(new Process.Builder(processName).isGenesis(false).build());
+                    Process process = new Process.Builder(processName).isGenesis(false).build();
                     System.out.print(" and I am waiting for ");
                     p_precedence.next();
 
@@ -37,13 +38,20 @@ public class Parser implements ReadPrecedenceFiles {
                         List<String> precedenceList = Arrays.asList(p_precedence.next().split("\\s*,"));
 
                         for(String p : precedenceList){
+                            //add dependency processes
+                            process.addDependencies(p);
                             if (precedenceList.indexOf(p)==0) System.out.print(p);
                             else if (precedenceList.indexOf(p) == precedenceList.size()-1) System.out.println(" and "+p);
                             else System.out.print(" and " +p);
                         }
+                        //add process to precesses list
+                        processes.add(process);
                     }
                     else {
-                        System.out.println(p_precedence.next());
+                        processName = p_precedence.next();
+                        process.addDependencies(processName);
+                        System.out.println(processName);
+                        processes.add(process);
                     }
                 }
                 else {
