@@ -22,7 +22,7 @@ public class PrecedenceGraph {
         System.out.println("Number of secondary processes: " +countSecondary);
 
         for (Process p: processes){
-            if (p.getWaitTime() != 0) System.out.println(p.getName() +" has to wat for " +p.getWaitTime() +"ms");
+            if (p.getWaitTime() != 0) System.out.println(p.getName() +" has to wait for " +p.getWaitTime() +"ms");
         }
 
     }
