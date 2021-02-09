@@ -29,7 +29,7 @@ public class Parser implements ReadPrecedenceFiles {
                 System.out.print("I am " +processName);
                 if(p_precedence.hasNext("(?i)\\s*waitfor\\s*")){
 
-                    //add secondary processName to secondaryProcesses list
+                    //add processName to processes list
                     Process process = new Process.Builder(processName).isGenesis(false).build();
                     System.out.print(" and I am waiting for ");
                     p_precedence.next();
@@ -39,7 +39,11 @@ public class Parser implements ReadPrecedenceFiles {
 
                         for(String p : precedenceList){
                             //add dependency processes
-                            process.addDependencies(p);
+                            for(Process proc : processes){
+                                if (proc.getProcessName().equals(p)){
+                                    process.addDependencies(proc);
+                                }
+                            }
                             if (precedenceList.indexOf(p)==0) System.out.print(p);
                             else if (precedenceList.indexOf(p) == precedenceList.size()-1) System.out.println(" and "+p);
                             else System.out.print(" and " +p);
@@ -49,13 +53,18 @@ public class Parser implements ReadPrecedenceFiles {
                     }
                     else {
                         processName = p_precedence.next();
-                        process.addDependencies(processName);
-                        System.out.println(processName);
+                        //add dependency process
+                        for(Process proc : processes){
+                            if (proc.getProcessName().equals(processName)){
+                                process.addDependencies(proc);
+                            }
+                        }
                         processes.add(process);
+                        System.out.println(processName);
                     }
                 }
                 else {
-                    //add genesis processName to genesisProcesses list
+                    //add genesis process to processes list
                     processes.add(new Process.Builder(processName).isGenesis(true).build());
                     System.out.println(" and I am not waiting anyone!");
                 }
@@ -69,7 +78,7 @@ public class Parser implements ReadPrecedenceFiles {
                 if(p_timings.hasNext("\\d+")){
                     procWaitTime = p_timings.nextInt();
                     for (Process p : processes) {
-                        if (p.getName().equals(processName)) p.setWaitTime(procWaitTime);
+                        if (p.getProcessName().equals(processName)) p.setWaitTime(procWaitTime);
                     }
                     System.out.println(" and I have to sleep for " +procWaitTime +" milliseconds");
                 }
