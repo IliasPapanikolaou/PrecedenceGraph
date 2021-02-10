@@ -39,8 +39,17 @@ public class PrecedenceGraph {
            genesisBlock.mineBlock(prefix);
             blockChain.add(genesisBlock);
             System.out.println("Node:"+(blockChain.size()-1)+" created");
+            for(Process p: processes){
+                Block block = new Block(blockChain.get(blockChain.size()-1).getHash(),processes,new Date().getTime());
+                block.executeProcces();
+                block.mineBlock(prefix);
+                blockChain.add(block);
+                System.out.println("Node:"+(blockChain.size()-1)+" created");
+            }
 
         }else{
+
+
             System.out.println("You must define at least one independent starting thread.");
         }
 
