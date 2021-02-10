@@ -1,5 +1,7 @@
 package com.unipi.precedence_graph;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,21 +40,29 @@ public class Process extends Thread {
 
     @Override
     public void run() {
+        Instant start = null;
+        Instant finish;
         try {
             if(!this.depedencies.isEmpty()){
                 for (Process p : depedencies){
-                    System.out.println("[" +this.name +"] I have to wait [" +p.name +"]");
+                    //System.out.println("[" +this.name +"] I have to wait [" +p.name +"]");
                     p.join();
                 }
             }
-            System.out.println("[" +this.name +"] I am sleeping for "+this.waitTime +"ms");
+            //System.out.println("[" +this.name +"] I am sleeping for "+this.waitTime +"ms");
+            start = Instant.now();
             sleep(waitTime);
-            return;
+            //return;
         }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("[" +Thread.currentThread().getName() +"] finished after " +this.waitTime +"ms");
+        //System.out.println("[" +Thread.currentThread().getName() +"] finished after " +this.waitTime +"ms");
+        finish = Instant.now();
+        long waitedIdle = Duration.between(PrecedenceGraph.globalTimerStart, start).toMillis();
+        long timeElapsed = Duration.between(PrecedenceGraph.globalTimerStart,finish).toMillis();
+        System.out.println("[" +this.name +"] finished. Time elapsed: " +(double)timeElapsed/1000
+                            +" seconds, waited idle for: " +(double)waitedIdle/1000 +" seconds");
     }
 
     //Builder

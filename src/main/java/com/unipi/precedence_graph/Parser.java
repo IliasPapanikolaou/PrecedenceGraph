@@ -40,7 +40,7 @@ public class Parser implements ReadPrecedenceFiles {
                         for(String p : precedenceList){
                             //add dependency processes
                             for(Process proc : processes){
-                                if (proc.getProcessName().equals(p)){
+                                if (proc.getProcessName().equalsIgnoreCase(p)){
                                     process.addDependencies(proc);
                                 }
                             }
@@ -55,7 +55,7 @@ public class Parser implements ReadPrecedenceFiles {
                         processName = p_precedence.next();
                         //add dependency process
                         for(Process proc : processes){
-                            if (proc.getProcessName().equals(processName)){
+                            if (proc.getProcessName().equalsIgnoreCase(processName)){
                                 process.addDependencies(proc);
                             }
                         }
@@ -78,7 +78,9 @@ public class Parser implements ReadPrecedenceFiles {
                 if(p_timings.hasNext("\\d+")){
                     procWaitTime = p_timings.nextInt();
                     for (Process p : processes) {
-                        if (p.getProcessName().equals(processName)) p.setWaitTime(procWaitTime);
+                        if (p.getProcessName().equals(processName)){
+                            p.setWaitTime(procWaitTime);
+                        }
                     }
                     System.out.println(" and I have to sleep for " +procWaitTime +" milliseconds");
                 }

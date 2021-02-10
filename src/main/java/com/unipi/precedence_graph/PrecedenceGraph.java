@@ -1,9 +1,12 @@
 package com.unipi.precedence_graph;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrecedenceGraph {
+
+    public static Instant globalTimerStart;
 
     public static void main(String[] args) {
 
@@ -31,7 +34,8 @@ public class PrecedenceGraph {
             }
         }
 
-        System.out.println("============== Starting Threads =================");
+        System.out.println("=============== Starting Threads =================");
+        globalTimerStart = Instant.now();
         for (Process p: processes){
             p.start();
         }
