@@ -9,12 +9,14 @@ public class Process extends Thread {
 
     private final String name;
     private final boolean isGenesis;
+    private boolean isCompleted;
     private int waitTime;
     private List<Process> depedencies;
 
     public Process(Builder builder){
         this.name = builder.name;
         this.isGenesis = builder.isGenesis;
+        this.isCompleted = false;
         this.depedencies = new ArrayList<>();
     }
 
@@ -22,6 +24,8 @@ public class Process extends Thread {
     public boolean isGenesisProcess(){
         return this.isGenesis;
     }
+
+    public boolean isCompleted(){ return this.isCompleted; }
 
     public int getWaitTime(){
         return this.waitTime;
@@ -37,6 +41,8 @@ public class Process extends Thread {
     }
 
     public void addDependencies(Process process) {this.depedencies.add(process);}
+
+    public void setCompleted(boolean isCompleted) {this.isCompleted=isCompleted;}
 
     @Override
     public void run() {

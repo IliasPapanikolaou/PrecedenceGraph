@@ -3,10 +3,15 @@ package com.unipi.precedence_graph;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class PrecedenceGraph {
 
     public static Instant globalTimerStart;
+
+    //Ioanna
+    public static int prefix = 2;
+    public static List<Block> blockChain = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -39,6 +44,18 @@ public class PrecedenceGraph {
         for (Process p: processes){
             p.start();
         }
+
+        //Ioanna
+//        if (countGenesis > 0) {
+//            Block genesisBlock = new Block("0",processes,new Date().getTime());
+//            genesisBlock.executeProcces();
+//            genesisBlock.mineBlock(prefix);
+//            blockChain.add(genesisBlock);
+//            System.out.println("Node:"+(blockChain.size()-1)+" created");
+//
+//        }else{
+//            System.out.println("You must define at least one independent starting thread.");
+//        }
 
     }
 }
