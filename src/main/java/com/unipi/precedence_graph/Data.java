@@ -8,7 +8,7 @@ public class Data {
     private long timeElapsed;
     private String dependencies;
 
-    public Data(Process process, int nodeNum, long timeElapsed) {
+    public Data(Process process, long nodeNum, long timeElapsed) {
         this.simulation = "Node " + nodeNum;
         this.threadName = process.getName();
         this.timeElapsed = timeElapsed;
