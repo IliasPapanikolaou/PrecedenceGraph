@@ -82,7 +82,7 @@ public class Parser implements ReadPrecedenceFiles {
                             p.setWaitTime(procWaitTime);
                         }
                     }
-                    System.out.println(" and I have to sleep for " +procWaitTime +" milliseconds");
+                    System.out.println(" and I have to work for " +procWaitTime +" milliseconds");
                 }
                 else {
                     System.out.println();

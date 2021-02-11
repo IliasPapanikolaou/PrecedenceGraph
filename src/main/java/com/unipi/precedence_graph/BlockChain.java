@@ -7,6 +7,7 @@ public class BlockChain {
 
     public static List<Block> blockChain = new ArrayList<>();
     public static int prefix = 3;
+    public static boolean isGenesisBlock = true;
 
     public static synchronized void createBlock(Process process, String emulationName){
         //Dependency processes to String
@@ -15,7 +16,8 @@ public class BlockChain {
             dependencies = process.getDependencies().toString();
         }
         //Create Genesis Block
-        if(process.isGenesisProcess()){
+
+        if(process.isGenesisProcess() && isGenesisBlock){
             Block genesisBlock = new Block("0", emulationName, process.getProcessName(),
                     String.valueOf(process.getWaitTime()), dependencies , process.getExecutionTimeStamp());
             genesisBlock.mineBlock(prefix);
@@ -23,6 +25,7 @@ public class BlockChain {
             System.out.println("Node: " +(blockChain.size()-1) +" created");
             //Add genesis block to blockChain list
             PrecedenceGraph.blockChain.add(genesisBlock);
+            isGenesisBlock = false;
         }
         else{
             Block block = new Block(blockChain.get(blockChain.size()-1).getHash(),
