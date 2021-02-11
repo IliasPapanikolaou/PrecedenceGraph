@@ -3,7 +3,6 @@ package com.unipi.precedence_graph;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 public class Block {
     private String hash;
@@ -14,7 +13,6 @@ public class Block {
     private final String dependencies;
     private final long timeStamp;
     private int nonce;
-    private List<Process> completedProcess;
 
     public Block(String previousHash, String emulationName, String processName,
                  String executionTime, String dependencies, long timeStamp) {
@@ -77,7 +75,6 @@ public class Block {
                 ", dependencies='" + dependencies + '\'' +
                 ", timeStamp=" + timeStamp +
                 ", nonce=" + nonce +
-                ", completedProcess=" + completedProcess +
                 '}';
     }
 }
