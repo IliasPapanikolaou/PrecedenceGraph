@@ -12,6 +12,7 @@ public class Process extends Thread {
     private boolean isCompleted;
     private int waitTime;
     private List<Process> depedencies;
+    private long executionTimeStamp;
 
     public Process(Builder builder){
         this.name = builder.name;
@@ -31,9 +32,11 @@ public class Process extends Thread {
         return this.waitTime;
     }
 
-    public List<Process> getDependencies() {return this.depedencies;}
+    public List<Process> getDependencies() { return this.depedencies;}
 
     public String getProcessName() { return this.name; }
+
+    public long getExecutionTimeStamp() { return  this.executionTimeStamp; }
 
     //Setter
     public void setWaitTime(int waitTime){
@@ -57,8 +60,8 @@ public class Process extends Thread {
             }
             //System.out.println("[" +this.name +"] I am sleeping for "+this.waitTime +"ms");
             start = Instant.now();
+            this.executionTimeStamp = start.getEpochSecond();
             sleep(waitTime);
-            //return;
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -69,6 +72,19 @@ public class Process extends Thread {
         long timeElapsed = Duration.between(PrecedenceGraph.globalTimerStart,finish).toMillis();
         System.out.println("[" +this.name +"] finished. Time elapsed: " +(double)timeElapsed/1000
                             +" seconds, waited idle for: " +(double)waitedIdle/1000 +" seconds");
+
+        //Create a Block for each Graph node
+//        Thread t = new Thread(()->{
+//            BlockChain.createBlock( this, "emulation1");
+//        });
+//        t.start();
+//        try {
+//            t.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        addProcessToBlockOrder(this);
     }
 
     //Builder
@@ -91,4 +107,15 @@ public class Process extends Thread {
 
     }
 
+    //Synchronized method so the blockOrder List can be accessed once at a time
+    private static synchronized void addProcessToBlockOrder(Process process){
+        PrecedenceGraph.blockOrder.add(process);
+    }
+
+    @Override
+    public String toString() {
+        return "Process{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }
