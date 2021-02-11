@@ -9,7 +9,6 @@ public class Process extends Thread {
 
     private final String name;
     private final boolean isGenesis;
-    private boolean isCompleted;
     private int waitTime;
     private List<Process> depedencies;
     private long executionTimeStamp;
@@ -17,7 +16,6 @@ public class Process extends Thread {
     public Process(Builder builder){
         this.name = builder.name;
         this.isGenesis = builder.isGenesis;
-        this.isCompleted = false;
         this.depedencies = new ArrayList<>();
     }
 
@@ -26,13 +24,11 @@ public class Process extends Thread {
         return this.isGenesis;
     }
 
-    public boolean isCompleted(){ return this.isCompleted; }
-
     public int getWaitTime(){
         return this.waitTime;
     }
 
-    public List<Process> getDependencies() { return this.depedencies;}
+    public List<Process> getDependencies() { return this.depedencies; }
 
     public String getProcessName() { return this.name; }
 
@@ -43,9 +39,7 @@ public class Process extends Thread {
         this.waitTime = waitTime;
     }
 
-    public void addDependencies(Process process) {this.depedencies.add(process);}
-
-    public void setCompleted(boolean isCompleted) {this.isCompleted=isCompleted;}
+    public void addDependencies(Process process) {this.depedencies.add(process); }
 
     @Override
     public void run() {
@@ -73,6 +67,9 @@ public class Process extends Thread {
         System.out.println("[" +this.name +"] finished. Time elapsed: " +(double)timeElapsed/1000
                             +" seconds, waited idle for: " +(double)waitedIdle/1000 +" seconds");
 
+        //Add Process to static list blockOrder
+        addProcessToBlockOrder(this);
+
         //Create a Block for each Graph node
 //        Thread t = new Thread(()->{
 //            BlockChain.createBlock( this, "emulation1");
@@ -84,7 +81,6 @@ public class Process extends Thread {
 //            e.printStackTrace();
 //        }
 
-        addProcessToBlockOrder(this);
     }
 
     //Builder
