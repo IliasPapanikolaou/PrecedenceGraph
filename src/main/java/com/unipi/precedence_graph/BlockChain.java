@@ -5,11 +5,23 @@ import java.util.List;
 
 public class BlockChain {
 
-    public static List<Block> blockChain = new ArrayList<>();
-    public static int prefix = 3;
-    public static boolean isGenesisBlock = true;
+    private List<Block> blockChain = new ArrayList<>();
+    private final int prefix = 3;
+    private boolean isGenesisBlock = true;
 
-    public static void createBlock(Process process, String emulationName){
+    //Default Constructor
+    public BlockChain(){}
+
+    //Setter
+    public void setIsGenesisBlock(Boolean isGenesisBlock){
+        this.isGenesisBlock = isGenesisBlock;
+    }
+    //Getter
+    public int getPrefix(){
+        return this.prefix;
+    }
+
+    public void createBlock(Process process, String emulationName){
         //Dependency processes to String
         String dependencies = "";
         if(!process.getDependencies().isEmpty()){
@@ -23,7 +35,7 @@ public class BlockChain {
             blockChain.add(genesisBlock);
             System.out.println("Node: " +(blockChain.size()-1) +" created");
             //Add genesis block to blockChain list
-            PrecedenceGraph.blockChain.add(genesisBlock);
+            PrecedenceGraph.blockChainList.add(genesisBlock);
             isGenesisBlock = false;
         }
         else{
@@ -35,13 +47,12 @@ public class BlockChain {
             blockChain.add(block);
             System.out.println("Node: " +(blockChain.size()-1) +" created");
             //Add block to blockChain list
-            PrecedenceGraph.blockChain.add(block);
+            PrecedenceGraph.blockChainList.add(block);
         }
-
     }
 
     //Method Overload
-    public static void createBlock(Process process, String emulationName, String previousHash){
+    public void createBlock(Process process, String emulationName, String previousHash){
         //Dependency processes to String
         String dependencies = "";
         if(!process.getDependencies().isEmpty()){
@@ -53,6 +64,6 @@ public class BlockChain {
         blockChain.add(genesisBlock);
         System.out.println("Node: " +(blockChain.size()-1) +" created");
         //Add genesis block to blockChain list
-        PrecedenceGraph.blockChain.add(genesisBlock);
+        PrecedenceGraph.blockChainList.add(genesisBlock);
     }
 }

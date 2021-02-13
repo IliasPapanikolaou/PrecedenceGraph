@@ -9,7 +9,7 @@ public class PrecedenceGraph {
 
     public static Instant globalTimerStart;
     public static volatile List<Process> blockOrder = new ArrayList<>();
-    public static  List<Block> blockChain = new ArrayList<>();
+    public static  List<Block> blockChainList = new ArrayList<>();
 
     public static void main(String[] args){
 
@@ -54,37 +54,37 @@ public class PrecedenceGraph {
 
 
         System.out.println("============= Creating BlockChain ================");
-
+       BlockChain blockChain = new BlockChain();
         //DB Connection
         Repository repository = new Repository();
         Connection conn = repository.connect();
         //If exists, retrieve the last Block from DB
         Block lastBlock = repository.retrieveLastBlock(conn);
         if (lastBlock != null) {
-            BlockChain.isGenesisBlock = false;
+            blockChain.setIsGenesisBlock(false);
             //retrieve previous Emulation Name
             int count = Integer.parseInt(lastBlock.getEmulationName().substring(10));
-            //Create new Emulation Name
+            //Create new Emulation Name - Auto Increment
             String emulationName = String.format("emulation_%d", ++count);
             //Continue the BlockChain from the last Block that already exists in DB
-            BlockChain.createBlock(blockOrder.get(0), emulationName, lastBlock.getPreviousHash());
+            blockChain.createBlock(blockOrder.get(0), emulationName, lastBlock.getPreviousHash());
             for (int i=1; i < blockOrder.size(); i++){
-                BlockChain.createBlock(blockOrder.get(i), emulationName);
+                blockChain.createBlock(blockOrder.get(i), emulationName);
             }
         }
         //Else if there is not BlockChain in DB, create a new one with GenesisBlock
         else {
             for (Process p: blockOrder){
-                BlockChain.createBlock(p, "emulation_1");
+                blockChain.createBlock(p, "emulation_1");
             }
         }
 
         //print BlockChain
-        blockChain.forEach(System.out::println);
+        blockChainList.forEach(System.out::println);
 
         //Save Block Chain to DB
         System.out.println("============= Saving to DataBase ================");
-        for (Block b : blockChain){
+        for (Block b : blockChainList){
             repository.insert(conn, b.getEmulationName(), b.getHash(), b.getPreviousHash(),
                     b.getProcessName(), b.getExecutionTime(), b.getDependencies(),
                     b.getTimeStamp(), b.getNonce());
@@ -93,7 +93,7 @@ public class PrecedenceGraph {
 
         System.out.println("============= Validate BlockChain ================");
 
-        Boolean isValid = repository.verifyBlockChain(conn);
+        Boolean isValid = repository.verifyBlockChain(conn, blockChain.getPrefix());
         System.out.println("BlockChain Valid: " +isValid);
         repository.close(conn);
 

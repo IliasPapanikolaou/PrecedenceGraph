@@ -117,7 +117,7 @@ public class Repository {
         }
     }
 
-    public Boolean verifyBlockChain(Connection conn){
+    public Boolean verifyBlockChain(Connection conn, int prefix){
 
         String sql = "SELECT * FROM blockchain ORDER BY id ASC";
         List<Block> blocks = new ArrayList<>();
@@ -138,7 +138,7 @@ public class Repository {
                 blocks.add(block);
             }
             System.out.println("Total blocks in BlockChain DataBase: " +blocks.size());
-            return ChainValidator.isChainValid(BlockChain.prefix, blocks);
+            return ChainValidator.isChainValid(prefix, blocks);
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
