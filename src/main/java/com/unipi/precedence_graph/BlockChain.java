@@ -9,17 +9,16 @@ public class BlockChain {
     public static int prefix = 3;
     public static boolean isGenesisBlock = true;
 
-    public static synchronized void createBlock(Process process, String emulationName){
+    public static void createBlock(Process process, String emulationName){
         //Dependency processes to String
         String dependencies = "";
         if(!process.getDependencies().isEmpty()){
             dependencies = process.getDependencies().toString();
         }
         //Create Genesis Block
-
         if(process.isGenesisProcess() && isGenesisBlock){
             Block genesisBlock = new Block("0", emulationName, process.getProcessName(),
-                    String.valueOf(process.getWaitTime()), dependencies , process.getExecutionTimeStamp());
+                    process.getWaitTime(), dependencies , process.getExecutionTimeStamp());
             genesisBlock.mineBlock(prefix);
             blockChain.add(genesisBlock);
             System.out.println("Node: " +(blockChain.size()-1) +" created");
@@ -30,7 +29,7 @@ public class BlockChain {
         else{
             Block block = new Block(blockChain.get(blockChain.size()-1).getHash(),
                     emulationName, process.getProcessName(),
-                    String.valueOf(process.getWaitTime()),
+                    process.getWaitTime(),
                     dependencies, process.getExecutionTimeStamp());
             block.mineBlock(prefix);
             blockChain.add(block);
@@ -39,5 +38,21 @@ public class BlockChain {
             PrecedenceGraph.blockChain.add(block);
         }
 
+    }
+
+    //Method Overload
+    public static void createBlock(Process process, String emulationName, String previousHash){
+        //Dependency processes to String
+        String dependencies = "";
+        if(!process.getDependencies().isEmpty()){
+            dependencies = process.getDependencies().toString();
+        }
+        Block genesisBlock = new Block(previousHash, emulationName, process.getProcessName(),
+                process.getWaitTime(), dependencies , process.getExecutionTimeStamp());
+        genesisBlock.mineBlock(prefix);
+        blockChain.add(genesisBlock);
+        System.out.println("Node: " +(blockChain.size()-1) +" created");
+        //Add genesis block to blockChain list
+        PrecedenceGraph.blockChain.add(genesisBlock);
     }
 }

@@ -1,5 +1,6 @@
 package com.unipi.precedence_graph;
 
+import java.sql.Connection;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public class PrecedenceGraph {
 
     public static Instant globalTimerStart;
-    public static  List<Process> blockOrder = new ArrayList<>();
+    public static volatile List<Process> blockOrder = new ArrayList<>();
     public static  List<Block> blockChain = new ArrayList<>();
 
     public static void main(String[] args){
@@ -42,21 +43,59 @@ public class PrecedenceGraph {
             p.start();
         }
 
-        //Wait for the last process to finish before continue
-        try {
-            processes.get(processes.size()-1).join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("============= Creating BlockChain ================");
-        new Thread(()->{
-            for (Process p: blockOrder){
-                BlockChain.createBlock(p, "emulation1");
+        //Wait for processes to finish before continue
+        processes.forEach(process -> {
+            try {
+                process.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            //print blockchain
-            for (Block b : blockChain) System.out.println(b.toString());
-        }).start();
+        });
 
+
+        System.out.println("============= Creating BlockChain ================");
+
+        //DB Connection
+        Repository repository = new Repository();
+        Connection conn = repository.connect();
+        //If exists, retrieve the last Block from DB
+        Block lastBlock = repository.retrieveLastBlock(conn);
+        if (lastBlock != null) {
+            BlockChain.isGenesisBlock = false;
+            //retrieve previous Emulation Name
+            int count = Integer.parseInt(lastBlock.getEmulationName().substring(10));
+            //Create new Emulation Name
+            String emulationName = String.format("emulation_%d", ++count);
+            //Continue the BlockChain from the last Block that already exists in DB
+            BlockChain.createBlock(blockOrder.get(0), emulationName, lastBlock.getPreviousHash());
+            for (int i=1; i < blockOrder.size(); i++){
+                BlockChain.createBlock(blockOrder.get(i), emulationName);
+            }
+        }
+        //Else if there is not BlockChain in DB, create a new one with GenesisBlock
+        else {
+            for (Process p: blockOrder){
+                BlockChain.createBlock(p, "emulation_1");
+            }
+        }
+
+        //print BlockChain
+        blockChain.forEach(System.out::println);
+
+        //Save Block Chain to DB
+        System.out.println("============= Saving to DataBase ================");
+        for (Block b : blockChain){
+            repository.insert(conn, b.getEmulationName(), b.getHash(), b.getPreviousHash(),
+                    b.getProcessName(), b.getExecutionTime(), b.getDependencies(),
+                    b.getTimeStamp(), b.getNonce());
+        }
+        System.out.println("BlockChain saved Successfully");
+
+        System.out.println("============= Validate BlockChain ================");
+
+        Boolean isValid = repository.verifyBlockChain(conn);
+        System.out.println("BlockChain Valid: " +isValid);
+        repository.close(conn);
 
     }
 }

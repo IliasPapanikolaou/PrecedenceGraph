@@ -69,18 +69,6 @@ public class Process extends Thread {
 
         //Add Process to static list blockOrder
         addProcessToBlockOrder(this);
-
-        //Create a Block for each Graph node
-//        Thread t = new Thread(()->{
-//            BlockChain.createBlock( this, "emulation1");
-//        });
-//        t.start();
-//        try {
-//            t.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
     }
 
     //Builder

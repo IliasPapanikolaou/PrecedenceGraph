@@ -8,14 +8,15 @@ public class Block {
     private String hash;
     private final String previousHash;
     private final String emulationName;
-    private final String processName;
-    private final String executionTime;
-    private final String dependencies;
-    private final long timeStamp;
-    private int nonce;
+    private String processName;
+    private int executionTime;
+    private String dependencies;
+    private long timeStamp;
+    private long nonce;
 
+    //Constructor
     public Block(String previousHash, String emulationName, String processName,
-                 String executionTime, String dependencies, long timeStamp) {
+                 int executionTime, String dependencies, long timeStamp) {
         this.previousHash = previousHash;
         this.emulationName = emulationName;
         this.processName = processName;
@@ -25,7 +26,24 @@ public class Block {
         hash = calculateBlockHash();
     }
 
-    //Constructor
+    //Constructor overload
+    public Block(String emulationName, String hash){
+        this.emulationName = emulationName;
+        this.previousHash = hash;
+    };
+    //Constructor overload
+    public Block(String hash, String previousHash, String emulationName, String processName,
+                 int executionTime, String dependencies, long timeStamp, long nonce) {
+        this.hash = hash;
+        this.previousHash = previousHash;
+        this.emulationName = emulationName;
+        this.processName = processName;
+        this.executionTime = executionTime;
+        this.dependencies = dependencies;
+        this.timeStamp = timeStamp;
+        this.nonce = nonce;
+    }
+
     public String mineBlock(int prefix){
         String prefixString = new String(new char[prefix]).replace('\0','0');
         while (!hash.substring(0,prefix).equals(prefixString)){
@@ -42,6 +60,24 @@ public class Block {
     }
     public String getPreviousHash() {
         return previousHash;
+    }
+    public String getEmulationName() {
+        return emulationName;
+    }
+    public String getProcessName() {
+        return processName;
+    }
+    public int getExecutionTime() {
+        return executionTime;
+    }
+    public String getDependencies() {
+        return dependencies;
+    }
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+    public long getNonce() {
+        return nonce;
     }
 
     public String calculateBlockHash(){
