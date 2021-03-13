@@ -19,8 +19,8 @@ public class Parser implements ReadPrecedenceFiles {
         List<Process> processes = new ArrayList<>();
 
         try {
-            Scanner p_precedence = new Scanner(new File("src/main/resources/p_precedence.txt"));
-            Scanner p_timings = new Scanner(new File("src/main/resources/p_timings.txt"));
+            Scanner p_precedence = new Scanner(new File("src/main/resources/p_precedence3.txt"));
+            Scanner p_timings = new Scanner(new File("src/main/resources/p_timings3.txt"));
 
             System.out.println("================ p_precedence.txt ===============");
             //p_precedence.txt parser
