@@ -2,6 +2,19 @@ package com.unipi.precedence_graph;
 
 import java.util.List;
 
+/**
+ *
+ *  Blockchain validator
+ *  *********************
+ *  - If saved hash of current block is not equal to hash calculated based on
+ *    calculateBlockHash() then blockchain is not valid
+ *  - If saved hash of previous block is not equal to hash of previous
+ *    block calculated based on calculateBlockHash() then blockchain is not valid
+ *  - If hash of current block does not have the defined prefix then
+ *    blockchain is not valid
+ *
+ */
+
 public class ChainValidator {
     public static Boolean isChainValid(int prefix, List<Block> blockChain){
         Block currentBlock;

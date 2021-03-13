@@ -4,6 +4,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ *
+ *  Each block when is created gets a prefix of 3 zeros.
+ *  Each block's hash is set by calculateBlockHash() method
+ *  based on the previous block Hash, block's emulation name,
+ *  execution time, dependencies, timeStamp and nonce
+ *
+ */
+
 public class Block {
     private String hash;
     private final String previousHash;
@@ -30,7 +39,7 @@ public class Block {
     public Block(String emulationName, String hash){
         this.emulationName = emulationName;
         this.previousHash = hash;
-    };
+    }
     //Constructor overload
     public Block(String hash, String previousHash, String emulationName, String processName,
                  int executionTime, String dependencies, long timeStamp, long nonce) {
@@ -80,6 +89,7 @@ public class Block {
         return nonce;
     }
 
+    //Block calculation and encryption
     public String calculateBlockHash(){
         String dataToHash = previousHash +emulationName +executionTime +dependencies
                 +timeStamp

@@ -7,6 +7,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ *
+ *     read txt files :
+ *     ****************
+ *     p_precedence.txt --> import process dependencies
+ *     ....................................................
+ *     for each process contained in p_precedence.txt a new Process is created
+ *     - if process has no dependencies it's name is saved and it is set to be genesis
+ *     - if process has dependencies it's name is saved, it is set not to be genesis and
+ *       each of the processes that has to wait for is saved in its precedenceList
+ *     p_timings.txt --> import process timings
+ *     ............................................
+ *     while reading timings file, each process that has timing defined in file,
+ *     sets it waitTime to that value. Processes are checked based on their name
+ *
+ **/
+
 public class Parser implements ReadPrecedenceFiles {
 
     //Default Constructor

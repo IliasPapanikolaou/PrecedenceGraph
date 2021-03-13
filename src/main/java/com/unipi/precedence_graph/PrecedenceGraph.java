@@ -1,9 +1,44 @@
+/*
+ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΑΝΤΙΚΕΙΜΕΝΟΣΤΕΦΟΥΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ
+ΠΜΣ «Προηγμένα Συστήματα Πληροφορικής - Ανάπτυξη Λογισμικού και Τεχνητής Νοημοσύνης»
+ΠΑΝΕΠΙΣΤΗΜΙΟ ΠΕΙΡΑΙΩΣ
+
+Τίτλος Εργασίας: «Precedence Graph Threading using Blockchains»
+
+Φοιτητές:
+Παπανικολάου Ηλίας  ΜΠΣΠ20039
+Δαβλιάνη Ιωάννα     ΜΠΣΠ20010
+
+14/3/2021
+ */
 package com.unipi.precedence_graph;
 
 import java.sql.Connection;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ *
+ *    Main thread calls functions to read p_precedence.txt, p_timings.txt
+ *    and create process instances which are saved in List<Process> processes.
+ *
+ *    When processes are defined, globalTimerStart is set and thread execution
+ *    starts. The main thread goes into a waiting state until all processes
+ *    are completed.
+ *
+ *    After completion the main thread checks if there are already stored blocks
+ *    in the repository.
+ *     - If there are already saved blocks in the repository a new emulation name is
+ *       created and the blockChain continues from the last block that already exists in DB
+ *     - If there is not blockChain in DB a new one is created with GenesisBlock
+ *
+ *    After blockchain creation blocks are stored in database.
+ *
+ *    Lastly, the consistency of the entire BlockChain is checked by calling
+ *    repository.verifyBlockChain() ,method.
+ *
+ */
 
 public class PrecedenceGraph {
 

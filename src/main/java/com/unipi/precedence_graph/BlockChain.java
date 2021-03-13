@@ -3,6 +3,18 @@ package com.unipi.precedence_graph;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Blockchain creation.
+ * ********************
+ * - If block is genesis, previous hash is set to 0,
+ * - If block is not genesis previous hash is previous block's hash
+ *  In each block emulationName, process name, process waiting time, dependencies
+ *  and ExecutionTimeStamp are saved in the block and added to blockchain
+ *  and blockChainList
+ *
+ */
+
 public class BlockChain {
 
     private List<Block> blockChain = new ArrayList<>();
