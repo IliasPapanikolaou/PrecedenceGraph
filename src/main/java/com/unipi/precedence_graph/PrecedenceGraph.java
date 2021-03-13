@@ -57,6 +57,8 @@ public class PrecedenceGraph {
        BlockChain blockChain = new BlockChain();
         //DB Connection
         Repository repository = new Repository();
+//        repository.createNewDatabase();
+//        repository.createNewTable();
         Connection conn = repository.connect();
         //If exists, retrieve the last Block from DB
         Block lastBlock = repository.retrieveLastBlock(conn);
