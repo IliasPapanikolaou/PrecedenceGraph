@@ -1,11 +1,10 @@
 package com.unipi.precedence_graph;
 
+import org.javatuples.Pair;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  *
@@ -13,7 +12,7 @@ import java.util.Scanner;
  *     ****************
  *     p_precedence.txt --> import process dependencies
  *     ....................................................
- *     for each process contained in p_precedence.txt a new Process is created
+ *     for each process contained in p_precedence.txt a new Process object is created
  *     - if process has no dependencies it's name is saved and it is set to be genesis
  *     - if process has dependencies it's name is saved, it is set not to be genesis and
  *       each of the processes that has to wait for is saved in its precedenceList
@@ -21,6 +20,12 @@ import java.util.Scanner;
  *     ............................................
  *     while reading timings file, each process that has timing defined in file,
  *     sets it waitTime to that value. Processes are checked based on their name
+ *
+ *     Method readFiles() urges user to select between different graphs found in resources folder,
+ *     new graph files placed in resource folder are automatically detected.
+ *
+ *     Method readPrecedenceFiles() Parses the p_precedence.txt and p_timings.txt
+ *     using regular expressions.
  *
  **/
 
@@ -36,8 +41,9 @@ public class Parser implements ReadPrecedenceFiles {
         List<Process> processes = new ArrayList<>();
 
         try {
-            Scanner p_precedence = new Scanner(new File("src/main/resources/p_precedence.txt"));
-            Scanner p_timings = new Scanner(new File("src/main/resources/p_timings.txt"));
+            Pair<String, String> graphFiles = readFiles();
+            Scanner p_precedence = new Scanner(new File("src/main/resources/"+graphFiles.getValue0()));
+            Scanner p_timings = new Scanner(new File("src/main/resources/"+graphFiles.getValue1()));
 
             System.out.println("================ p_precedence.txt ===============");
             //p_precedence.txt parser
@@ -111,5 +117,45 @@ public class Parser implements ReadPrecedenceFiles {
         }
 
         return processes;
+    }
+
+    private Pair<String, String> readFiles() throws FileNotFoundException{
+
+        File folder = new File("src/main/resources");
+        File[] files = folder.listFiles(((dir,name) -> name.toLowerCase().startsWith("p_precedence")));
+        //Default Graph
+        String fileP = "p_precedence.txt";
+        String fileT = "p_timings.txt";
+        System.out.println("Please choose a Precedence Graph (or press 0 to exit):");
+        int numOfFiles = 0;
+        for(int i = 0; i < (files != null ? files.length : 0); i++){
+            numOfFiles = i+1;
+            System.out.println(numOfFiles +". " +files[i].getName());
+        }
+        //User input
+        Scanner input = new Scanner(System.in);
+        if(input.hasNextInt()){
+            int num = input.nextInt();
+            if(num == 0) System.exit(0);
+            else if(num > 0 && num <= numOfFiles){
+                fileP = files[num-1].getName();
+                String s = "p_timings" +fileP.substring(12);
+                files = folder.listFiles(f -> f.getName().equals(s));
+                if (files != null) {
+                    fileT = Arrays.stream(files).findFirst().orElseThrow(FileNotFoundException::new).getName();
+                }
+                else {
+                    System.out.println("The corresponding " +s +" file not found.");
+                    System.exit(0);
+                }
+            }
+            else{
+                System.out.println("Wrong expression, I will use the default graphs");
+            }
+        }
+        else{
+            System.out.println("Wrong expression, I will use the default graphs");
+        }
+        return new Pair<>(fileP, fileT);
     }
 }

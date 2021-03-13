@@ -4,6 +4,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Repository class contains the logic need to connect to the SQLite Database.
+ *
+ *  Method verifyBlockChain() retrieves the entire BlockChains for Database
+ *  and ChainValidator.isChainValid() method to validate the BlockChain
+ */
+
 public class Repository {
 
     public void createNewDatabase(){

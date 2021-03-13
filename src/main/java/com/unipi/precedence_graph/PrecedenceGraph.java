@@ -13,6 +13,7 @@
  */
 package com.unipi.precedence_graph;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -134,5 +135,11 @@ public class PrecedenceGraph {
         System.out.println("BlockChain Valid: " +isValid);
         repository.close(conn);
 
+        System.out.println("\nPress any key to exit...");
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

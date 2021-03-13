@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  *
+ *     Process class extends thread class.
  *     Each process object that is created has a name and set as genesis or not.
  *     Genesis process is the first process of the graph (starting point).
  *
@@ -28,6 +29,8 @@ import java.util.List;
  *     This achieved by using the "addProcessToBlockOrder(Process process)"
  *     synchronized method so the static "blockOrder" List can be accessed once at a time when
  *     threads race to access it.
+ *
+ *     Builder design pattern was uses for the Process class.
  *
  */
 
